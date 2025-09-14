@@ -1,41 +1,44 @@
-// src/payments/schemas/order-status.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { Order } from './order.schema';
 
-export type OrderStatusDocument = HydratedDocument<OrderStatus>;
 
 @Schema({ timestamps: true })
-export class OrderStatus {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Order' })
+export class OrderStatus extends Document {
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true })
   collect_id: Order;
 
-  @Prop() // [cite: 32]
+  @Prop({ required: true })
   order_amount: number;
 
-  @Prop() // [cite: 32]
+  @Prop()
   transaction_amount: number;
 
-  @Prop() // [cite: 32]
+  @Prop()
   payment_mode: string;
 
-  @Prop() // [cite: 32]
-  payment_details: string;
+  @Prop()
+  payment_details: string; // The field we added previously
 
-  @Prop() // [cite: 32]
+  @Prop()
   bank_reference: string;
 
-  @Prop() // [cite: 32]
+  @Prop()
   payment_message: string;
 
-  @Prop() // [cite: 32]
+  @Prop({ default: 'PENDING' })
   status: string;
 
-  @Prop() // [cite: 32]
+  @Prop()
   error_message: string;
 
-  @Prop() // [cite: 32]
+  @Prop()
   payment_time: Date;
+
+  // --- THIS IS THE MISSING FIELD ---
+  @Prop({ index: true }) // Added index for faster lookups
+  gateway_order_id: string;
 }
 
 export const OrderStatusSchema = SchemaFactory.createForClass(OrderStatus);
+

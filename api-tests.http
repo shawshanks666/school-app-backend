@@ -1,0 +1,77 @@
+### Register a new user
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "testuser2@example.com",
+    "password": "password123"
+}
+
+###
+### Login to get a token
+# @name loginRequest
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "testuser2@example.com",
+    "password": "password123"
+}
+
+###
+### Get user profile using the token
+@token = {{loginRequest.response.body.access_token}}
+
+GET http://localhost:3000/auth/profile
+Authorization: Bearer {{token}}
+
+
+###
+# 1. Create a Payment Request
+# This request uses the access token from the login step above.
+###
+POST http://localhost:3000/payments/create-payment
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "amount": 2500,
+    "callback_url": "https://www.youtube.com/",
+    "student_info": {
+        "name": "Jane Doe",
+        "id": "STU-98765",
+        "email": "jane.doe@example.com"
+    }
+}
+
+
+# 2. Simulate a Webhook from the Payment Gateway
+#
+# IMPORTANT: Before running this, you must:
+#   a) Run the "Create a Payment Request" above.
+#   b) Look in your MongoDB `orderstatuses` collection.
+#   c) Copy the `gateway_order_id` from the new document.
+#   d) Paste that ID below, replacing "PASTE_GATEWAY_ORDER_ID_HERE".
+###
+
+
+
+POST http://localhost:3000/payments/webhook
+Content-Type: application/json
+
+{
+  "status": 200,
+  "order_info": {
+    "order_id": "68c610ee15465b43063",
+    "order_amount": 2500,
+    "transaction_amount": 2500,
+    "gateway": "Card",
+    "bank_reference": "CARDREF54321",
+    "status": "success",
+    "payment_mode": "card",
+    "payemnt_details": "Visa Debit 4242",
+    "Payment_message": "Payment was successful.",
+    "payment_time": "2025-09-14T05:36:00.000Z",
+    "error_message": "NA"
+  }
+}

@@ -1,35 +1,35 @@
 // src/payments/schemas/order.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Document } from 'mongoose';
 
-// This defines the structure for the nested student_info object
-@Schema({ _id: false })
+// Interface for the nested student_info object
 export class StudentInfo {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   id: string;
 
-  @Prop()
+  @Prop({ required: true })
   email: string;
 }
 
-export type OrderDocument = HydratedDocument<Order>;
-
 @Schema({ timestamps: true })
-export class Order {
-  @Prop({ required: true }) // [cite: 16]
+export class Order extends Document {
+  @Prop({ required: true })
   school_id: string;
 
-  @Prop({ required: true }) // [cite: 17]
+  @Prop({ required: true })
   trustee_id: string;
 
-  @Prop({ type: StudentInfo }) // [cite: 18]
+  @Prop({ type: StudentInfo, required: true })
   student_info: StudentInfo;
 
-  @Prop() // [cite: 24]
+  @Prop({ required: true })
   gateway_name: string;
+
+  @Prop({ required: true })
+  order_amount: number;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

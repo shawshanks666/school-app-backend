@@ -1,26 +1,74 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { User } from './schemas/user.schema';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    private jwtService: JwtService,
+  ) {}
+
+  /**
+   * Registers a new user.
+   * @param createUserDto - The user data for registration.
+   * @returns The newly created user object (without password).
+   */
+  async register(createUserDto: CreateUserDto): Promise<Partial<User>> {
+    const { email, password } = createUserDto;
+
+    const existingUser = await this.userModel.findOne({ email }).exec();
+    if (existingUser) {
+      throw new ConflictException('A user with this email already exists.');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const createdUser = new this.userModel({
+      email,
+      password: hashedPassword,
+    });
+
+    const savedUser = await createdUser.save();
+    const { password: _, ...user } = savedUser.toObject();
+    return user;
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  /**
+   * Logs a user in.
+   * @param email - The user's email.
+   * @param pass - The user's password.
+   * @returns An object containing the JWT access token.
+   */
+  async login(
+    email: string,
+    pass: string,
+  ): Promise<{ access_token: string }> {
+    const user = await this.userModel.findOne({ email }).exec();
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials.');
+    }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    const isPasswordMatching = await bcrypt.compare(pass, user.password);
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    if (!isPasswordMatching) {
+      throw new UnauthorizedException('Invalid credentials.');
+    }
+
+    const payload = { email: user.email, sub: user._id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }
