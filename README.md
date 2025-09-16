@@ -10,22 +10,10 @@ Backend:
 
     Styling: None (API only)
 
-Frontend:
 
-    Framework: React with Vite
+Setup
 
-    Styling: Tailwind CSS
-
-    UI Components: shadcn/ui
-
-    Routing: React Router
-
-    API Communication: Axios
-
-Backend Setup
-
-The backend is a NestJS microservice responsible for handling user authentication, payment processing, and providing data to the frontend.
-Prerequisites
+0. Prerequisites
 
     Node.js (v18 or later recommended)
 
