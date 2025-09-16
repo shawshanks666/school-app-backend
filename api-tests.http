@@ -35,8 +35,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "amount": 2500,
-    "callback_url": "https://www.youtube.com/",
+    "amount": 150000,
+    "callback_url": "www.youtube.com",
     "student_info": {
         "name": "Jane Doe",
         "id": "STU-98765",
@@ -62,12 +62,12 @@ Content-Type: application/json
 {
   "status": 200,
   "order_info": {
-    "order_id": "68c610ee15465b43063",
+    "order_id": "68c7a8c1154d1bce65b45630",
     "order_amount": 2500,
     "transaction_amount": 2500,
     "gateway": "Card",
     "bank_reference": "CARDREF54321",
-    "status": "success",
+    "status": "failed",
     "payment_mode": "card",
     "payemnt_details": "Visa Debit 4242",
     "Payment_message": "Payment was successful.",
