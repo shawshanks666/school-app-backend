@@ -1,73 +1,98 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+Tech Stack
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+    Framework: NestJS (Node.js)
 
-## Description
+    Database: MongoDB with Mongoose
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+    Authentication: JWT (JSON Web Tokens) with Passport.js
 
-## Installation
+    Styling: None (API only)
 
-```bash
-$ npm install
-```
 
-## Running the app
+Setup
 
-```bash
-# development
-$ npm run start
+0. Prerequisites
 
-# watch mode
-$ npm run start:dev
+    Node.js (v18 or later recommended)
 
-# production mode
-$ npm run start:prod
-```
+    npm or yarn
 
-## Test
+    A MongoDB Atlas account for the database connection string.
 
-```bash
-# unit tests
-$ npm run test
+1. Installation
 
-# e2e tests
-$ npm run test:e2e
+    Clone the repository and navigate into the backend folder (e.g., school-app-backend).
 
-# test coverage
-$ npm run test:cov
-```
+    git clone <your-repo-url>
+    cd <your-repo-folder>/school-app-backend
 
-## Support
+    Install the required dependencies.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+    npm install
 
-## Stay in touch
+2. Environment Variables
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    Create a .env file in the root of the backend folder.
 
-## License
+    Copy the contents of .env.example (if provided) or add the following required variables:
 
-Nest is [MIT licensed](LICENSE).
+    # MongoDB Connection
+    MONGO_URI=your_mongodb_atlas_connection_string
+
+    # JWT Secret for app authentication
+    JWT_SECRET=your_super_secret_and_long_jwt_string
+
+    # Payment Gateway Credentials (from assessment)
+    PG_KEY=edvtest01
+    API_KEY=your_payment_gateway_api_key
+    SCHOOL_ID=65b0e6293e9f76a9694d84b4
+
+3. Running the Server
+
+To start the backend development server, run:
+
+npm run start:dev
+
+The API will be available at http://localhost:3000.
+Backend API Endpoints
+
+All endpoints under /transactions and /payments are protected and require a valid JWT Bearer token in the Authorization header.
+Authentication (/auth)
+
+    POST /auth/register: Creates a new user account.
+
+        Body: { "email": "user@example.com", "password": "yourpassword" }
+
+    POST /auth/login: Authenticates a user and returns an access_token.
+
+        Body: { "email": "user@example.com", "password": "yourpassword" }
+
+Payments (/payments)
+
+    POST /payments/create-payment: Creates a new payment request and returns a payment URL from the provider.
+
+        Body: { "amount": 1500, "callback_url": "https://your-frontend.com/success" }
+
+    POST /payments/webhook: (Unprotected) An endpoint for the payment gateway to send transaction status updates.
+
+Transactions (/transactions)
+
+    GET /transactions: Fetches a paginated, sorted, and filtered list of all transactions.
+
+        Query Parameters (Optional):
+
+            page (number, default: 1)
+
+            limit (number, default: 10)
+
+            status (string, e.g., "success", "failed")
+
+            schoolId (string)
+
+            sortBy (string, e.g., "createdAt", "order_amount")
+
+            order (string, "asc" or "desc")
+
+    GET /transactions/status/:id: Fetches the current status of a single transaction by its unique ID.
