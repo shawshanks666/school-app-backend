@@ -112,11 +112,6 @@ Transactions (/transactions)
 <img width="1575" height="509" alt="image" src="https://github.com/user-attachments/assets/3e879339-98a0-442d-b060-cf7adc71027f" />
 
 
-Register (auth/register)
-
-Login (auth/login)
-
-Get Profile (auth/profile)
 
 
 
