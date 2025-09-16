@@ -3,8 +3,8 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "testuser2@example.com",
-    "password": "password123"
+    "email": "testuser1@example.com",
+    "password": "qwerty123"
 }
 
 ###
@@ -14,8 +14,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "testuser2@example.com",
-    "password": "password123"
+    "email": "testuser1@example.com",
+    "password": "qwerty123"
 }
 
 ###
@@ -35,12 +35,12 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "amount": 150000,
+    "amount": 10000,
     "callback_url": "www.youtube.com",
     "student_info": {
-        "name": "Jane Doe",
-        "id": "STU-98765",
-        "email": "jane.doe@example.com"
+        "name": "Lisa",
+        "id": "STU-12365",
+        "email": "lilisa@example.com"
     }
 }
 
@@ -62,12 +62,12 @@ Content-Type: application/json
 {
   "status": 200,
   "order_info": {
-    "order_id": "68c7a8c1154d1bce65b45630",
-    "order_amount": 2500,
-    "transaction_amount": 2500,
+    "order_id": "68c9d608154d1bce65b4e6e1",
+    "order_amount": 1,
+    "transaction_amount": 1,
     "gateway": "Card",
     "bank_reference": "CARDREF54321",
-    "status": "failed",
+    "status": "success",
     "payment_mode": "card",
     "payemnt_details": "Visa Debit 4242",
     "Payment_message": "Payment was successful.",
