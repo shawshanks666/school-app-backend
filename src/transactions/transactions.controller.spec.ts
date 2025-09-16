@@ -3,27 +3,19 @@ import { AuthGuard } from '@nestjs/passport';
 import { TransactionsService } from './transactions.service';
 import { QueryTransactionDto } from './query-transactions.dto';
 
-@UseGuards(AuthGuard('jwt')) // Protects all routes in this controller
+@UseGuards(AuthGuard('jwt')) // Secure all endpoints in this controller
 @Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
-  /**
-   * GET /transactions
-   * Fetches a paginated and filtered list of transactions.
-   * Example: /transactions?page=1&limit=20&schoolId=someId&status=success
-   */
   @Get()
   findAll(@Query() queryDto: QueryTransactionDto) {
     return this.transactionsService.findAll(queryDto);
   }
 
-  /**
-   * GET /transactions/status/:id
-   * Fetches the status of a single transaction by its unique ID.
-   */
   @Get('status/:id')
   findStatusById(@Param('id') id: string) {
     return this.transactionsService.findStatusById(id);
   }
 }
+

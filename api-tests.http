@@ -75,3 +75,24 @@ Content-Type: application/json
     "error_message": "NA"
   }
 }
+
+
+
+###
+### 5. Fetch all transactions (with default pagination)
+GET http://localhost:3000/transactions
+Authorization: Bearer {{token}}
+
+###
+### 6. Fetch transactions with filters and pagination
+# You can combine any of these query parameters
+GET http://localhost:3000/transactions?page=1&limit=5&status=success&schoolId=65b0e6293e9f76a9694d84b4
+Authorization: Bearer {{token}}
+
+###
+### 7. Check status of a single transaction
+# NOTE: Manually copy a transaction ID (_id from orderstatuses collection)
+# from your database and paste it into the URL below.
+GET http://localhost:3000/transactions/status/PASTE_TRANSACTION_ID_HERE
+Authorization: Bearer {{token}}
+

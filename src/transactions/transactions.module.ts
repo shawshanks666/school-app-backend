@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { TransactionsService } from './transactions.service';
 import { TransactionsController } from './transactions.controller';
-import { Order, OrderSchema } from '../payments/schemas/order.schema';
-import { OrderStatus, OrderStatusSchema } from '../payments/schemas/order-status.schema';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Order,OrderSchema } from 'src/payments/schemas/order.schema';
+import { OrderStatus,OrderStatusSchema } from 'src/payments/schemas/order-status.schema';
 
 @Module({
   imports: [
@@ -16,3 +16,4 @@ import { MongooseModule } from '@nestjs/mongoose';
   providers: [TransactionsService],
 })
 export class TransactionsModule {}
+

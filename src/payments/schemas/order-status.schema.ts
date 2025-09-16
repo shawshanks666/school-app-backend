@@ -1,10 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { Order } from './order.schema';
+import { HydratedDocument } from 'mongoose';
 
+export type OrderStatusDocument = HydratedDocument<OrderStatus>;
 
 @Schema({ timestamps: true })
-export class OrderStatus extends Document {
+export class OrderStatus {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true })
   collect_id: Order;
 
@@ -18,7 +20,7 @@ export class OrderStatus extends Document {
   payment_mode: string;
 
   @Prop()
-  payment_details: string; // The field we added previously
+  payment_details: string;
 
   @Prop()
   bank_reference: string;
@@ -35,8 +37,7 @@ export class OrderStatus extends Document {
   @Prop()
   payment_time: Date;
 
-  // --- THIS IS THE MISSING FIELD ---
-  @Prop({ index: true }) // Added index for faster lookups
+  @Prop({ index: true })
   gateway_order_id: string;
 }
 
